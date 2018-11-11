@@ -10,15 +10,17 @@ import './landing_page.dart';
 // posar descripcions als jocs: DONE
 // posar percentatge del joc: DONE
 // posar settings
-// afegir joc
+// afegir joc: DONE
 // canviar colors
 // canviar UI respostes
+// posar icono Android: Done
+// posar icono iOS
 
 class QuizzesProperties {
   static const int CAPITALS_QUIZ = 0;
   static const int FRONTIERS_QUIZ = 1;
   static const int POPULATION_QUIZ = 2;
-  static const int FLAGS_QUIZ = -1;
+  static const int FLAGS_QUIZ = 3;
 
   static const List<Color> colors = [
     const Color(0xFF5A89E6),
@@ -71,6 +73,11 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
       double pageDo = (position.pixels / (position.maxScrollExtent/(QuizzesProperties.quizzes.length.toDouble()-1)));
       double percent = pageDo - page;
 
+      setState(() {
+        quiz = QuizzesProperties.quizzes[page];
+
+      });
+
       if (direction == ScrollDirection.reverse) {
         //page begin
         if (QuizzesProperties.quizzes.length-1 < page+1) {
@@ -80,7 +87,7 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
         colorTween.end = QuizzesProperties.quizzes[page+1].color;
         setState(() {
           backgroundColor = colorTween.lerp(percent);
-          quiz = QuizzesProperties.quizzes[page];
+          //quiz = QuizzesProperties.quizzes[page];
         });
 
       }else if (direction == ScrollDirection.forward) {
@@ -92,7 +99,7 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
         colorTween.end = QuizzesProperties.quizzes[page+1].color;
         setState(() {
           backgroundColor = colorTween.lerp(percent);
-          quiz = QuizzesProperties.quizzes[page];
+          //quiz = QuizzesProperties.quizzes[page];
 
         });
       }else {
@@ -196,8 +203,8 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                         child: new ListView.builder(
                           itemBuilder: (context, index) {
                             Quiz quiz = QuizzesProperties.quizzes[index];
-                            EdgeInsets padding = const EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0, bottom: 30.0);
 
+                            EdgeInsets padding = const EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0, bottom: 30.0);
                             return new Padding(
                                 padding: padding,
                                 // LA CAIXA (CARTA)
@@ -281,7 +288,7 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                                                           new Padding(
                                                             padding: const EdgeInsets.only(left: 5.0),
                                                             child: new Text(
-                                                                quiz.maximumScore == null ? "0%": (quiz.maximumScore*100).round().toString() + "%",
+                                                                quiz.maximumScore == null ? "0%": quiz.maximumScore.isNaN ? "0%": (quiz.maximumScore*100).round().toString() + "%",
                                                                 //(quiz.maximumScore*100).round().toString() + "%"
 
                                                             ),

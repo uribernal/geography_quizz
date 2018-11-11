@@ -32,6 +32,9 @@ class DataSaver {
     print("KEYS");
     for (String key in prefs.getKeys()){
       print(key + " --> " + prefs.getDouble(key).toString());
+      if (prefs.getDouble(key).isInfinite){
+        prefs.setDouble(key, 0.0);
+      }
     }
   }
 }

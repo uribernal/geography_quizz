@@ -27,7 +27,6 @@ class Quiz{
     _questions =  dataGenerator.getQuestions(_index);
     _questionCount = _questions.length;
 
-
     getSavedScore(name).then((result) {
       // If we need to rebuild the widget with the resulting data,
       // make sure to use `setState`
@@ -79,10 +78,13 @@ class Quiz{
   }
 
   resetScores(){
+
     saveScore(_scoreCount/_questionCount);
     //_maximumScore = _scoreCount/_questionCount;
+    _currentQuestionIndex = -1;
     _scoreCount = 0;
     _errorCount = 0;
+    _questions.shuffle();
   }
 
 }
