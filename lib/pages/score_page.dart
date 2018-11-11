@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-
-import './home_page.dart';
+import '../utils/quiz.dart';
+import './quiz_selector_page.dart';
 
 
 class ScorePage extends StatelessWidget{
 
-  final int score;
-  final int totalQuestions;
+  final Quiz quiz;
 
-  ScorePage(this.score, this.totalQuestions);
+  ScorePage(this.quiz);
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +17,19 @@ class ScorePage extends StatelessWidget{
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           new Text("Your score: ", style: new TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 50.0),),
-          new Text(score.toString() +"/" + totalQuestions.toString(), style: new TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 50.0),),
+          new Text(quiz.score.toString() +"/" + quiz.numQuestions.toString(), style: new TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 50.0),),
           new IconButton(
               icon: new Icon(Icons.arrow_right),
               color: Colors.white,
               iconSize: 50.0,
-              onPressed: () => Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (BuildContext context) => new MyHomePage()), (Route route) => route == null)
-          )
+              onPressed: () {
+                quiz.resetScores();
+
+                Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(
+                    builder: (BuildContext context) => new QuizSelector()), (
+                    Route route) => route == null);
+              }
+              )
         ],
       ),
     );

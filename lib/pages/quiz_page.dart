@@ -1,7 +1,7 @@
-import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import '../utils/data_saver.dart';
 import '../utils/question.dart';
 import '../utils/quiz.dart';
 import '../ui/anwer_button.dart';
@@ -10,8 +10,8 @@ import '../ui/correct_wrong_overlay.dart';
 import './score_page.dart';
 
 class QuizPage extends StatefulWidget {
-  final int game;
-  QuizPage(this.game);
+  final Quiz quiz;
+  QuizPage(this.quiz);
 
   @override
   State createState() => new QuizPageState();
@@ -20,7 +20,6 @@ class QuizPage extends StatefulWidget {
 class QuizPageState extends State<QuizPage> {
 
   Question currentQuestion;
-  Quiz quiz;
   RestartableTimer timer;
   String questionText;
   int questionNumber;
@@ -30,13 +29,10 @@ class QuizPageState extends State<QuizPage> {
   @override
   void initState(){
     super.initState();
-    print(widget.game.toString());
 
-    quiz = new Quiz(widget.game);
-
-    currentQuestion = quiz.nextQuestion;
+    currentQuestion = widget.quiz.nextQuestion;
     questionText = currentQuestion.question;
-    questionNumber = quiz.questionNumber;
+    questionNumber = widget.quiz.questionNumber;
 
     const timeout = const Duration(seconds: 8);
     const ms = const Duration(milliseconds: 8000);
@@ -58,10 +54,15 @@ class QuizPageState extends State<QuizPage> {
 
   void handleAnswer(String answer){
     isCorrect = (currentQuestion.correctAnswer == answer);
-    quiz.answer(isCorrect);
+    widget.quiz.answer(isCorrect);
     this.setState((){
       overlayShouldBeVisible = true;
     });
+  }
+
+  void dispose(){
+    timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -83,18 +84,18 @@ class QuizPageState extends State<QuizPage> {
           !timer.isActive, // time's up
           isCorrect,
           () {
-            if (quiz.length == questionNumber || quiz.numErrors > 3){
+            if (widget.quiz.length == questionNumber || widget.quiz.numErrors > 3){
               overlayShouldBeVisible = false;
-              Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (BuildContext context) => new ScorePage(quiz.score, quiz.length)), (Route route) => route == null);
-              return;
+              //DataSaver.saveData(widget.quiz.name, widget.quiz.score/widget.quiz.questionNumber);
+              Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (BuildContext context) => new ScorePage(widget.quiz)),  ModalRoute.withName(Navigator.defaultRouteName));
+              //return;
             }
-            currentQuestion = quiz.nextQuestion;
+            currentQuestion = widget.quiz.nextQuestion;
             this.setState( () {
               overlayShouldBeVisible = false;
               questionText = currentQuestion.question;
-              questionNumber = quiz.questionNumber;
+              questionNumber = widget.quiz.questionNumber;
               // tornar a iniciar contador
-              //RestartableTimer(Duration _duration, ZoneCallback _callback)
               timer.reset();
             }
             );

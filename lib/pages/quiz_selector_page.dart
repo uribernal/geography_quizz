@@ -1,88 +1,98 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';// scroll
+import '../utils/data_saver.dart';
+import '../utils/quiz.dart';
 import './landing_page.dart';
-import '../utils/game_card.dart';
 
 
 // Todo
 // Posar idiomes
-// posar descripcions als jocs
-// posar percentatge del joc
+// posar descripcions als jocs: DONE
+// posar percentatge del joc: DONE
 // posar settings
 // afegir joc
 // canviar colors
 // canviar UI respostes
 
-class GamesProperties {
+class QuizzesProperties {
+  static const int CAPITALS_QUIZ = 0;
+  static const int FRONTIERS_QUIZ = 1;
+  static const int POPULATION_QUIZ = 2;
+  static const int FLAGS_QUIZ = -1;
+
   static const List<Color> colors = [
     const Color(0xFF5A89E6),
-    const Color(0xFFF77B67),
+    Colors.green,
     const Color(0xFF4EC5AC),
+    const Color(0xFFF77B67),
     const Color(0xCD853F),
   ];
 
-  static List<GameCard> games = [
-    new GameCard("Capitals", colors[0], "assets/world.png"),
-    new GameCard("Frontiers", Colors.green, "assets/frontiers.png"),
-    new GameCard("Population", colors[2], "assets/population2.png"),
-    new GameCard("Flags", colors[1], "assets/flag.png"),
+  static List<Quiz> quizzes = [
+    new Quiz(0, "Capitals", colors[0], "assets/world.png"),
+    new Quiz(1, "Frontiers", colors[1], "assets/frontiers.png"),
+    new Quiz(2, "Population", colors[2], "assets/population.png"),
+    new Quiz(3, "Flags", colors[3], "assets/flag.png"),
   ];
+
 
 }
 
-class GameSelector extends StatefulWidget {
-  GameSelector({Key key, this.title}) : super(key: key);
+class QuizSelector extends StatefulWidget {
+  QuizSelector({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _GameSelectorState createState() => new _GameSelectorState();
+  _QuizSelectorState createState() => new _QuizSelectorState();
 }
 
 
-class _GameSelectorState extends State<GameSelector> with TickerProviderStateMixin {
+class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMixin {
 
-  double score = 0.0;
   Color backgroundColor;
   Color constBackColor;
   Tween<Color> colorTween; // An interpolation between two colors.
-  GameCard game;
   ScrollController scrollController;
+
+  Quiz quiz;
 
   @override
   void initState() {
-    colorTween = new ColorTween(begin: GamesProperties.colors[0], end: GamesProperties.colors[1]);
-    backgroundColor = GamesProperties.games[0].color;
-    game = GamesProperties.games[0];
+    super.initState();
+    colorTween = new ColorTween(begin: QuizzesProperties.colors[0], end: QuizzesProperties.colors[1]);
+    backgroundColor = QuizzesProperties.quizzes[0].color;
+    quiz = QuizzesProperties.quizzes[0];
 
     scrollController = new ScrollController();
     scrollController.addListener(() {
       ScrollPosition position = scrollController.position;
       ScrollDirection direction = position.userScrollDirection;
-      int page = (position.pixels / (position.maxScrollExtent/(GamesProperties.games.length.toDouble()-1))).toInt();
-      double pageDo = (position.pixels / (position.maxScrollExtent/(GamesProperties.games.length.toDouble()-1)));
+      int page = (position.pixels ~/ (position.maxScrollExtent/(QuizzesProperties.quizzes.length.toDouble()-1)));
+      double pageDo = (position.pixels / (position.maxScrollExtent/(QuizzesProperties.quizzes.length.toDouble()-1)));
       double percent = pageDo - page;
-      /*setState(() {
-        description = getDescription(page);
-      });*/
+
       if (direction == ScrollDirection.reverse) {
         //page begin
-        if (GamesProperties.games.length-1 < page+1) {
+        if (QuizzesProperties.quizzes.length-1 < page+1) {
           return;
         }
-        colorTween.begin = GamesProperties.games[page].color;
-        colorTween.end = GamesProperties.games[page+1].color;
+        colorTween.begin = QuizzesProperties.quizzes[page].color;
+        colorTween.end = QuizzesProperties.quizzes[page+1].color;
         setState(() {
           backgroundColor = colorTween.lerp(percent);
+          quiz = QuizzesProperties.quizzes[page];
         });
+
       }else if (direction == ScrollDirection.forward) {
         //+1 begin page end
-        if (GamesProperties.games.length-1 < page+1) {
+        if (QuizzesProperties.quizzes.length-1 < page+1) {
           return;
         }
-        colorTween.begin = GamesProperties.games[page].color;
-        colorTween.end = GamesProperties.games[page+1].color;
+        colorTween.begin = QuizzesProperties.quizzes[page].color;
+        colorTween.end = QuizzesProperties.quizzes[page+1].color;
         setState(() {
           backgroundColor = colorTween.lerp(percent);
+          quiz = QuizzesProperties.quizzes[page];
 
         });
       }else {
@@ -92,6 +102,11 @@ class _GameSelectorState extends State<GameSelector> with TickerProviderStateMix
   }
 
 
+  @override
+  void dispose(){
+    scrollController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -112,13 +127,22 @@ class _GameSelectorState extends State<GameSelector> with TickerProviderStateMix
             leading: new IconButton(
               //icon: new Icon(CustomIcons.menu), // Icono menu
               icon: new Icon(Icons.menu), // Icono menu
-              onPressed: () {},
+              onPressed: () {
+                /*setState(() {
+                  quiz.score=quiz.score+10;
+                });*/
+                DataSaver.printData();
+                },
             ),
             actions: <Widget>[
               new IconButton(
                 //icon: new Icon(CustomIcons.search, size: 26.0,), // per definir iconos propis
                 icon: new Icon(Icons.settings, size: 26.0,),
-                onPressed: () {},
+                onPressed: () {
+                  for (Quiz q in QuizzesProperties.quizzes){
+                    print(q.name + " --> " + q.maximumScore.toString());
+                  }
+                },
               )
             ],
           ),
@@ -156,7 +180,8 @@ class _GameSelectorState extends State<GameSelector> with TickerProviderStateMix
                               ),
                             ),
                             new Text(
-                              "",
+                              quiz.getDescription(),
+                              //quiz.getDescription(),
                               style: new TextStyle(
                                   color: Colors.white70
                               ),
@@ -170,16 +195,15 @@ class _GameSelectorState extends State<GameSelector> with TickerProviderStateMix
                         width: _width,
                         child: new ListView.builder(
                           itemBuilder: (context, index) {
-                            GameCard game = GamesProperties.games[index];
-
+                            Quiz quiz = QuizzesProperties.quizzes[index];
                             EdgeInsets padding = const EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0, bottom: 30.0);
 
                             return new Padding(
                                 padding: padding,
                                 // LA CAIXA (CARTA)
                                 child: new InkWell(
-                                  onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new LandingPage(index))),
-                                  child: new Container(
+                                  onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new LandingPage(quiz))),
+                                    child: new Container(
                                       decoration: new BoxDecoration(
                                           borderRadius: new BorderRadius.circular(10.0),
                                           boxShadow: [
@@ -193,16 +217,12 @@ class _GameSelectorState extends State<GameSelector> with TickerProviderStateMix
                                       height: 250.0,
                                       child: new Stack(
                                         children: <Widget>[
-                                          // new Hero(
-                                          //   tag: "TAG001",
-                                          //   child:
                                           new Container(
                                             decoration: new BoxDecoration(
                                               color: Colors.white,
                                               borderRadius: new BorderRadius.circular(10.0),
                                             ),
                                           ),
-                                          // ),
                                           new Padding(
                                             padding: const EdgeInsets.all(16.0),
                                             child: new Column(
@@ -217,7 +237,7 @@ class _GameSelectorState extends State<GameSelector> with TickerProviderStateMix
                                                       new Expanded(
                                                         child: new Container(
                                                             alignment: Alignment.topCenter,
-                                                            child: new Image.asset(game.icon, fit: BoxFit.cover, ) //etc
+                                                            child: new Image.asset(quiz.icon, fit: BoxFit.cover, ) //etc
                                                         ),
                                                       )
                                                     ],
@@ -233,7 +253,7 @@ class _GameSelectorState extends State<GameSelector> with TickerProviderStateMix
                                                     child: new Material(
                                                       color: Colors.transparent,
                                                       child: new Text(
-                                                        game.title, // El titol de la carta
+                                                        quiz.name, // El titol de la carta
                                                         style: new TextStyle(
                                                             fontSize: 30.0
                                                         ),
@@ -251,15 +271,19 @@ class _GameSelectorState extends State<GameSelector> with TickerProviderStateMix
                                                         children: <Widget>[
                                                           new Expanded(
                                                             child: new LinearProgressIndicator(
-                                                              value: score/150,
+                                                              //value: quiz.score/150,
+                                                              value: quiz.maximumScore == null ? (0.0): quiz.maximumScore,
+                                                              //value: quiz.maximumScore,
                                                               backgroundColor: Colors.grey.withAlpha(50),
-                                                              valueColor: new AlwaysStoppedAnimation<Color>(game.color),
+                                                              valueColor: new AlwaysStoppedAnimation<Color>(quiz.color),
                                                             ),
                                                           ),
                                                           new Padding(
                                                             padding: const EdgeInsets.only(left: 5.0),
                                                             child: new Text(
-                                                                (score*100).round().toString() + "%"
+                                                                quiz.maximumScore == null ? "0%": (quiz.maximumScore*100).round().toString() + "%",
+                                                                //(quiz.maximumScore*100).round().toString() + "%"
+
                                                             ),
                                                           )
                                                         ],
@@ -293,6 +317,8 @@ class _GameSelectorState extends State<GameSelector> with TickerProviderStateMix
       ),
     );
   }
+
+
 }
 
 class CustomScrollPhysics extends ScrollPhysics {
