@@ -6,6 +6,8 @@ import './landing_page.dart';
 
 
 // Todo
+// fix bugs
+// add levels
 // Posar idiomes
 // posar descripcions als jocs: DONE
 // posar percentatge del joc: DONE

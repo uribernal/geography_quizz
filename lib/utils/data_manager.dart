@@ -23,6 +23,91 @@ class DataGenerator {
   "🇨🇳", "🇮🇳", "🇺🇸", "🇮🇩", "🇧🇷", "🇵🇰", "🇳🇬", "🇧🇩", "🇷🇺", "🇲🇽", "🇯🇵", "🇪🇹", "🇵🇭", "🇪🇬", "🇻🇳", "", "🇩🇪", "🇮🇷", "🇹🇷", "🇹🇭", "🇬🇧", "🇫🇷", "🇮🇹", "🇹🇿", "🇿🇦", "🇲🇲", "🇰🇷", "🇰🇪", "🇨🇴", "🇪🇸", "🇦🇷", "🇺🇬", "🇺🇦", "🇩🇿", "🇸🇩", "🇮🇶", "🇵🇱", "🇨🇦", "🇦🇫", "🇲🇦", "🇸🇦", "🇵🇪", "🇻🇪", "🇺🇿", "🇲🇾", "🇦🇴", "🇲🇿", "🇳🇵", "🇬🇭", "🇾🇪", "🇲🇬", "🇰🇵", "", "🇦🇺", "🇨🇲", "🇹🇼", "🇳🇪", "🇱🇰", "🇧🇫", "🇷🇴", "🇲🇼", "🇲🇱", "🇰🇿", "🇸🇾", "🇨🇱", "🇿🇲", "🇬🇹", "🇳🇱", "🇿🇼", "🇪🇨", "🇸🇳", "🇰🇭", "🇹🇩", "🇸🇴", "🇬🇳", "🇸🇸", "🇷🇼", "🇹🇳", "🇧🇪", "🇨🇺", "🇧🇯", "🇧🇮", "🇧🇴", "🇬🇷", "🇭🇹", "🇩🇴", "", "🇵🇹", "🇸🇪", "🇦🇿", "🇯🇴", "🇭🇺", "🇦🇪", "🇧🇾", "🇭🇳", "🇹🇯", "🇷🇸", "🇦🇹", "🇨🇭", "🇮🇱", "🇵🇬", "🇹🇬", "🇸🇱", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
   ];
 
+  List<Question> buildQuestions(List<String> questionWords, List<String> answerWords) {
+    List<Question> questions = [];
+
+    // Per cada pais
+    for (var index = 0; index < questionWords.length; index++) {
+      // Si te resposta
+      if (answerWords[index] != "") {
+        String question = questionWords[index];
+        String correctAnswer = answerWords[index];
+        List<String> wrongAswers = [];
+
+        // Escollim les 3 respostes incorrectes
+        for (var wrongAnswerIndex = 1; wrongAnswerIndex <= 3;
+        wrongAnswerIndex++) {
+          // index random de 1 a num_paisos
+          int randomIndex = new Random().nextInt(questionWords.length - 2) + 1;
+
+          String wrongAnswer = answerWords[randomIndex];
+
+          // Si la resposta correcte no coincideix amb la resposta falsa i no hem afegit aquesta resposta falsa ja
+          if (correctAnswer != wrongAnswer &&
+              !wrongAswers.contains(wrongAnswer))
+            wrongAswers.add(wrongAnswer);
+          else
+            wrongAnswerIndex--;
+        }
+
+        questions.add(new Question(question, correctAnswer, wrongAswers));
+      }
+    }
+    questions.shuffle();
+    return questions;
+  }
+
+  List<Question> buildQuestionsFromArray(List<String> questionWords, List<List<String>> answerWords) {
+    List<Question> questions = [];
+
+    // Per cada pais
+    for (var index = 0; index < questionWords.length; index++) {
+      // Si no es un pais amb mar
+      if (answerWords[index].length > 0) {
+
+        // Seleccionem una frontera random dintre de les possibles
+        int randomPossibleAnswer = new Random().nextInt(answerWords[index].length);
+
+        String question = questionWords[index];
+        String correctAnswer = answerWords[index][randomPossibleAnswer];
+        List<String> wrongAswers = [];
+
+        // Escollim les 3 respostes incorrectes
+        for (var wrongAnswerIndex = 1; wrongAnswerIndex <= 3;
+        wrongAnswerIndex++) {
+          // index random de 1 a num_paisos
+          int randomWrongIndex = new Random().nextInt(questionWords.length);
+
+          // Si la no es mar (no te fronteres)
+          if (answerWords[randomWrongIndex].length > 0) {
+            // Frontera random per la wrong asnwer
+            int randomPossibleWrongAnswer = new Random().nextInt(
+                answerWords[randomWrongIndex].length);
+            print("randomPossibleWrongAnswer: " +
+                randomPossibleWrongAnswer.toString());
+
+            String wrongAnswer = answerWords[randomWrongIndex][randomPossibleWrongAnswer];
+            print(wrongAnswer);
+
+            // Si la resposta correcte no coincideix amb la resposta falsa i no hem afegit aquesta resposta falsa ja
+            if (correctAnswer != wrongAnswer &&
+                !wrongAswers.contains(wrongAnswer))
+              wrongAswers.add(wrongAnswer);
+            else
+              wrongAnswerIndex--;
+          }
+          else {
+            wrongAnswerIndex--;
+          }
+        }
+
+        questions.add(new Question(question, correctAnswer, wrongAswers));
+      }
+    }
+    questions.shuffle();
+    return questions;
+  }
+
   List<Question> buildCapitals(List<String> countries, List<String> capitals) {
     List<Question> questionsCapitals = [];
 
@@ -189,21 +274,20 @@ class DataGenerator {
   List<Question> getQuestions(int quiz) {
     List<Question> questions = [];
     if (quiz == QuizzesProperties.CAPITALS_QUIZ) {
-      questions = buildCapitals(_countries, _capitals);
+      questions = buildQuestions(_countries, _capitals);
       questions.shuffle();
       return questions;
     } else if (quiz == QuizzesProperties.FRONTIERS_QUIZ) {
-      questions = buildFrontiers(_countries, _frontiers);
+      questions = buildQuestionsFromArray(_countries, _frontiers);
       questions.shuffle();
       return questions;
     } else if (quiz == QuizzesProperties.POPULATION_QUIZ) {
-      questions = buildPopulation(_countries, _population);
+      questions = buildQuestions(_countries, _population);
       questions.shuffle();
       return questions;
     }
     else {
-      questions = buildFlags(_countries, _flags);
-
+      questions = buildQuestions(_countries, _flags);
       questions.shuffle();
       return questions;
     }

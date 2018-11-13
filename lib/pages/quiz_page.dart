@@ -1,7 +1,6 @@
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-import '../utils/data_saver.dart';
 import '../utils/question.dart';
 import '../utils/quiz.dart';
 import '../ui/anwer_button.dart';
