@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';// scroll
-import '../utils/data_saver.dart';
 import '../utils/quiz.dart';
 import './landing_page.dart';
 
 
 // Todo
-// fix bugs
+// fix bugs: DONE
 // add levels
 // Posar idiomes
 // posar descripcions als jocs: DONE
@@ -25,11 +24,17 @@ class QuizzesProperties {
   static const int FLAGS_QUIZ = 3;
 
   static const List<Color> colors = [
-    const Color(0xFF5A89E6),
+    /*const Color(0xFF5A89E6),
     Colors.green,
     const Color(0xFF4EC5AC),
     const Color(0xFFF77B67),
-    const Color(0xCD853F),
+    const Color(0xCD853F),*/
+    const Color(0xFF07969E),
+    const Color(0xFF45C48B),
+    const Color(0xFFFBD130),
+    const Color(0xFFFB6755),
+    const Color(0xFF323741),
+    const Color(0xFF323741),
   ];
 
   static List<Quiz> quizzes = [
@@ -132,15 +137,15 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
           appBar: new AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0.0,
-            title: new Text("Geography Quiz App"),
+            title: new Text("Geography Quiz App", style: TextStyle(color: QuizzesProperties.colors[4])),
             leading: new IconButton(
               //icon: new Icon(CustomIcons.menu), // Icono menu
-              icon: new Icon(Icons.menu), // Icono menu
+              icon: new Image.asset("assets/population.png", fit: BoxFit.cover, ), // Icono menu
               onPressed: () {
                 /*setState(() {
                   quiz.score=quiz.score+10;
                 });*/
-                DataSaver.printData();
+                //DataSaver.printData();
                 },
             ),
             actions: <Widget>[
@@ -148,9 +153,9 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                 //icon: new Icon(CustomIcons.search, size: 26.0,), // per definir iconos propis
                 icon: new Icon(Icons.settings, size: 26.0,),
                 onPressed: () {
-                  for (Quiz q in QuizzesProperties.quizzes){
+                  /*for (Quiz q in QuizzesProperties.quizzes){
                     print(q.name + " --> " + q.maximumScore.toString());
-                  }
+                  }*/
                 },
               )
             ],
@@ -177,7 +182,8 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                               child: new Text(
                                 "2018 Geography Quiz",
                                 style: new TextStyle(
-                                    color: Colors.white,
+                                    //color: Colors.white,
+                                    color: QuizzesProperties.colors[4],
                                     fontSize: 30.0
                                 ),
                               ),
@@ -185,14 +191,16 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                             new Text(
                               "Try to aswer correctly.",
                               style: new TextStyle(
-                                  color: Colors.white70
+                                  //color: Colors.white70
+                                  color: QuizzesProperties.colors[4]
                               ),
                             ),
                             new Text(
                               quiz.getDescription(),
                               //quiz.getDescription(),
                               style: new TextStyle(
-                                  color: Colors.white70
+                                  //color: Colors.white70
+                                  color: QuizzesProperties.colors[4]
                               ),
                             ),
                           ],
@@ -228,7 +236,8 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                                         children: <Widget>[
                                           new Container(
                                             decoration: new BoxDecoration(
-                                              color: Colors.white,
+                                              //color: Colors.white,
+                                              color: new Color(0xDDFFFFFF),
                                               borderRadius: new BorderRadius.circular(10.0),
                                             ),
                                           ),
@@ -264,7 +273,8 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                                                       child: new Text(
                                                         quiz.name, // El titol de la carta
                                                         style: new TextStyle(
-                                                            fontSize: 30.0
+                                                            fontSize: 30.0,
+                                                            color: QuizzesProperties.colors[4]
                                                         ),
                                                       ),
                                                     ),
@@ -291,6 +301,7 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                                                             padding: const EdgeInsets.only(left: 5.0),
                                                             child: new Text(
                                                                 quiz.maximumScore == null ? "0%": quiz.maximumScore.isNaN ? "0%": (quiz.maximumScore*100).round().toString() + "%",
+                                                                style: TextStyle(color: QuizzesProperties.colors[4])
                                                                 //(quiz.maximumScore*100).round().toString() + "%"
 
                                                             ),
