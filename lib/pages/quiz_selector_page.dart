@@ -5,14 +5,16 @@ import './landing_page.dart';
 
 
 // Todo
+// update del score al tornar del joc
 // fix bugs: DONE
 // add levels
 // Posar idiomes
+// sonido
 // posar descripcions als jocs: DONE
 // posar percentatge del joc: DONE
 // posar settings
 // afegir joc: DONE
-// canviar colors
+// canviar colors: DONE
 // canviar UI respostes
 // posar icono Android: Done
 // posar icono iOS
@@ -28,13 +30,22 @@ class QuizzesProperties {
     Colors.green,
     const Color(0xFF4EC5AC),
     const Color(0xFFF77B67),
-    const Color(0xCD853F),*/
+    const Color(0xCD853F),
+
+    Colors.purpleAccent,
+    Colors.redAccent
+    Colors.yellowAccent
+    Colors.orangeAccent
+    */
+
+
     const Color(0xFF07969E),
     const Color(0xFF45C48B),
     const Color(0xFFFBD130),
     const Color(0xFFFB6755),
-    const Color(0xFF323741),
-    const Color(0xFF323741),
+    const Color(0xFFFFFFFF),
+    const Color(0xFF000000),
+
   ];
 
   static List<Quiz> quizzes = [
@@ -140,7 +151,7 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
             title: new Text("Geography Quiz App", style: TextStyle(color: QuizzesProperties.colors[4])),
             leading: new IconButton(
               //icon: new Icon(CustomIcons.menu), // Icono menu
-              icon: new Image.asset("assets/population.png", fit: BoxFit.cover, ), // Icono menu
+              icon: new Image.asset("assets/population.png", fit: BoxFit.cover, height: 30.0,), // Icono menu
               onPressed: () {
                 /*setState(() {
                   quiz.score=quiz.score+10;
@@ -274,7 +285,7 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                                                         quiz.name, // El titol de la carta
                                                         style: new TextStyle(
                                                             fontSize: 30.0,
-                                                            color: QuizzesProperties.colors[4]
+                                                            color: QuizzesProperties.colors[5]
                                                         ),
                                                       ),
                                                     ),
@@ -301,7 +312,7 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                                                             padding: const EdgeInsets.only(left: 5.0),
                                                             child: new Text(
                                                                 quiz.maximumScore == null ? "0%": quiz.maximumScore.isNaN ? "0%": (quiz.maximumScore*100).round().toString() + "%",
-                                                                style: TextStyle(color: QuizzesProperties.colors[4])
+                                                                style: TextStyle(color: QuizzesProperties.colors[5])
                                                                 //(quiz.maximumScore*100).round().toString() + "%"
 
                                                             ),

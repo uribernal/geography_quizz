@@ -1,6 +1,7 @@
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:geography_quizz/pages/quiz_selector_page.dart';
 import '../utils/question.dart';
 import '../utils/quiz.dart';
 import '../ui/anwer_button.dart';
@@ -72,11 +73,11 @@ class QuizPageState extends State<QuizPage> {
       children: <Widget>[
         new Column(// This is our main page
           children: <Widget>[
-            new AnswerButton(currentQuestion.getPosibleAnswer(0), Colors.purpleAccent, () => handleAnswer(currentQuestion.getPosibleAnswer(0))), // true button
-            new AnswerButton(currentQuestion.getPosibleAnswer(1), Colors.redAccent, () => handleAnswer(currentQuestion.getPosibleAnswer(1))), // true button
+            new AnswerButton(currentQuestion.getPosibleAnswer(0), QuizzesProperties.colors[0], () => handleAnswer(currentQuestion.getPosibleAnswer(0))), // true button
+            new AnswerButton(currentQuestion.getPosibleAnswer(1), QuizzesProperties.colors[1], () => handleAnswer(currentQuestion.getPosibleAnswer(1))), // true button
             new QuestionText(questionText, questionNumber),
-            new AnswerButton(currentQuestion.getPosibleAnswer(2), Colors.yellowAccent, () => handleAnswer(currentQuestion.getPosibleAnswer(2))), // true button
-            new AnswerButton(currentQuestion.getPosibleAnswer(3), Colors.orangeAccent, () => handleAnswer(currentQuestion.getPosibleAnswer(3))), // true button
+            new AnswerButton(currentQuestion.getPosibleAnswer(2), QuizzesProperties.colors[2], () => handleAnswer(currentQuestion.getPosibleAnswer(2))), // true button
+            new AnswerButton(currentQuestion.getPosibleAnswer(3), QuizzesProperties.colors[3], () => handleAnswer(currentQuestion.getPosibleAnswer(3))), // true button
           ]
         ),
       overlayShouldBeVisible == true ? new CorrectWrongOverlay(
