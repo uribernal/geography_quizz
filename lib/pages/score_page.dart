@@ -25,9 +25,7 @@ class ScorePage extends StatelessWidget{
               onPressed: () {
                 quiz.resetScores();
 
-                Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(
-                    builder: (BuildContext context) => new QuizSelector()), (
-                    Route route) => route == null);
+                Navigator.of(context).pop(quiz);
               }
               )
         ],

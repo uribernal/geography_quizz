@@ -104,6 +104,4 @@ class QuizPageState extends State<QuizPage> {
     ],
     );
   }
-
-
 }

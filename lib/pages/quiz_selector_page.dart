@@ -81,7 +81,9 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
     super.initState();
     colorTween = new ColorTween(begin: QuizzesProperties.colors[0], end: QuizzesProperties.colors[1]);
     backgroundColor = QuizzesProperties.quizzes[0].color;
-    quiz = QuizzesProperties.quizzes[0];
+    setState(() {
+      quiz = QuizzesProperties.quizzes[0];
+    });
 
     scrollController = new ScrollController();
     scrollController.addListener(() {
@@ -91,12 +93,13 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
       double pageDo = (position.pixels / (position.maxScrollExtent/(QuizzesProperties.quizzes.length.toDouble()-1)));
       double percent = pageDo - page;
 
-      setState(() {
+      /*setState(() {
         quiz = QuizzesProperties.quizzes[page];
 
-      });
+      });*/
 
       if (direction == ScrollDirection.reverse) {
+
         //page begin
         if (QuizzesProperties.quizzes.length-1 < page+1) {
           return;
@@ -105,10 +108,13 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
         colorTween.end = QuizzesProperties.quizzes[page+1].color;
         setState(() {
           backgroundColor = colorTween.lerp(percent);
-          //quiz = QuizzesProperties.quizzes[page];
+          if (percent > 0.5)
+            quiz = QuizzesProperties.quizzes[page + 1];
         });
 
       }else if (direction == ScrollDirection.forward) {
+
+
         //+1 begin page end
         if (QuizzesProperties.quizzes.length-1 < page+1) {
           return;
@@ -117,7 +123,8 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
         colorTween.end = QuizzesProperties.quizzes[page+1].color;
         setState(() {
           backgroundColor = colorTween.lerp(percent);
-          //quiz = QuizzesProperties.quizzes[page];
+          if (percent < 0.5)
+            quiz = QuizzesProperties.quizzes[page];
 
         });
       }else {
@@ -132,6 +139,17 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
     scrollController.dispose();
     super.dispose();
   }
+
+  _navigateToFilterObject(BuildContext context) async {
+    final result = await Navigator.push(context,
+      MaterialPageRoute(builder: (context) => LandingPage(quiz)),);
+    //refresh the state of your Widget
+    setState(() {
+      quiz = result;
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -151,7 +169,7 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
             title: new Text("Geography Quiz App", style: TextStyle(color: QuizzesProperties.colors[4])),
             leading: new IconButton(
               //icon: new Icon(CustomIcons.menu), // Icono menu
-              icon: new Image.asset("assets/population.png", fit: BoxFit.cover, height: 30.0,), // Icono menu
+              icon: new Image.asset("assets/ic_launcher.png", fit: BoxFit.cover, height: 50.0,), // Icono menu
               onPressed: () {
                 /*setState(() {
                   quiz.score=quiz.score+10;
@@ -160,7 +178,7 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                 },
             ),
             actions: <Widget>[
-              new IconButton(
+              /*new IconButton(
                 //icon: new Icon(CustomIcons.search, size: 26.0,), // per definir iconos propis
                 icon: new Icon(Icons.settings, size: 26.0,),
                 onPressed: () {
@@ -168,7 +186,7 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                     print(q.name + " --> " + q.maximumScore.toString());
                   }*/
                 },
-              )
+              )*/
             ],
           ),
 
@@ -230,7 +248,9 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                                 padding: padding,
                                 // LA CAIXA (CARTA)
                                 child: new InkWell(
-                                  onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new LandingPage(quiz))),
+                                  onTap: () =>
+                                      //_navigateToFilterObject(context),
+                                    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new LandingPage(quiz))),
                                     child: new Container(
                                       decoration: new BoxDecoration(
                                           borderRadius: new BorderRadius.circular(10.0),

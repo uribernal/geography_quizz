@@ -78,8 +78,10 @@ class Quiz{
   }
 
   resetScores(){
-
-    saveScore(_scoreCount/_questionCount);
+    if (_maximumScore < _scoreCount/_questionCount) {
+      _maximumScore = _scoreCount/_questionCount;
+      saveScore(_scoreCount / _questionCount);
+    }
     //_maximumScore = _scoreCount/_questionCount;
     _currentQuestionIndex = -1;
     _scoreCount = 0;
