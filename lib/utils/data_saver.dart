@@ -6,13 +6,9 @@ class DataSaver {
   static saveData(String quiz, double newScore) async {
     // obtain shared preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     // set value
-    //print("save data " + quiz + " : " + data.toString());
-
-    double oldScore = prefs.getDouble(quiz) ?? 0.0;
-    if (newScore > oldScore)
-      prefs.setDouble(quiz, newScore);
-
+    prefs.setDouble(quiz, newScore);
   }
 
   static Future<double> readData(String quiz) async {
@@ -21,9 +17,10 @@ class DataSaver {
 
     // Try reading data from the counter key. If it does not exist, return 0.
     double data = prefs.getDouble(quiz) ?? 0.0;
-    //print("got data from " + quiz + " : " + data.toString());
-    if (data.isNaN)
+
+    if (data.isNaN | data.isInfinite)
       data = 0.0;
+
     return data;
   }
 

@@ -24,10 +24,9 @@ class ScorePage extends StatelessWidget{
               iconSize: 50.0,
               onPressed: () {
                 quiz.resetScores();
-
                 Navigator.of(context).pop(quiz);
               }
-              )
+          )
         ],
       ),
     );

@@ -12,7 +12,7 @@ class Quiz{
   Color color;
   String icon;
 
-  // IA parameters
+  // TECH parameters
   int _index;
   List<Question> _questions;
   int _currentQuestionIndex = -1;
@@ -20,7 +20,6 @@ class Quiz{
   int _errorCount = 0;
   int _questionCount = 0;
   double _maximumScore;
-  //double _maximumScore2 = 0.0;
 
   Quiz(this._index, this.name, this.color, this.icon){
     DataGenerator dataGenerator = new DataGenerator();
@@ -62,9 +61,6 @@ class Quiz{
     return _maximumScore;
   }
 
-  //double get maximumScore2{
-  //  return _maximumScore2;
-  //}
   String getDescription() {
     return ("There are " + _questionCount.toString() + " questions in this quiz.");
   }
@@ -82,7 +78,6 @@ class Quiz{
       _maximumScore = _scoreCount/_questionCount;
       saveScore(_scoreCount / _questionCount);
     }
-    //_maximumScore = _scoreCount/_questionCount;
     _currentQuestionIndex = -1;
     _scoreCount = 0;
     _errorCount = 0;

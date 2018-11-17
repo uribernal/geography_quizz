@@ -3,22 +3,6 @@ import 'package:flutter/rendering.dart';// scroll
 import '../utils/quiz.dart';
 import './landing_page.dart';
 
-
-// Todo
-// update del score al tornar del joc
-// fix bugs: DONE
-// add levels
-// Posar idiomes
-// sonido
-// posar descripcions als jocs: DONE
-// posar percentatge del joc: DONE
-// posar settings
-// afegir joc: DONE
-// canviar colors: DONE
-// canviar UI respostes
-// posar icono Android: Done
-// posar icono iOS
-
 class QuizzesProperties {
   static const int CAPITALS_QUIZ = 0;
   static const int FRONTIERS_QUIZ = 1;
@@ -26,26 +10,12 @@ class QuizzesProperties {
   static const int FLAGS_QUIZ = 3;
 
   static const List<Color> colors = [
-    /*const Color(0xFF5A89E6),
-    Colors.green,
-    const Color(0xFF4EC5AC),
-    const Color(0xFFF77B67),
-    const Color(0xCD853F),
-
-    Colors.purpleAccent,
-    Colors.redAccent
-    Colors.yellowAccent
-    Colors.orangeAccent
-    */
-
-
     const Color(0xFF07969E),
     const Color(0xFF45C48B),
     const Color(0xFFFBD130),
     const Color(0xFFFB6755),
     const Color(0xFFFFFFFF),
     const Color(0xFF000000),
-
   ];
 
   static List<Quiz> quizzes = [
@@ -54,8 +24,6 @@ class QuizzesProperties {
     new Quiz(2, "Population", colors[2], "assets/population.png"),
     new Quiz(3, "Flags", colors[3], "assets/flag.png"),
   ];
-
-
 }
 
 class QuizSelector extends StatefulWidget {
@@ -81,6 +49,7 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
     super.initState();
     colorTween = new ColorTween(begin: QuizzesProperties.colors[0], end: QuizzesProperties.colors[1]);
     backgroundColor = QuizzesProperties.quizzes[0].color;
+
     setState(() {
       quiz = QuizzesProperties.quizzes[0];
     });
@@ -92,11 +61,6 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
       int page = (position.pixels ~/ (position.maxScrollExtent/(QuizzesProperties.quizzes.length.toDouble()-1)));
       double pageDo = (position.pixels / (position.maxScrollExtent/(QuizzesProperties.quizzes.length.toDouble()-1)));
       double percent = pageDo - page;
-
-      /*setState(() {
-        quiz = QuizzesProperties.quizzes[page];
-
-      });*/
 
       if (direction == ScrollDirection.reverse) {
 
@@ -113,7 +77,6 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
         });
 
       }else if (direction == ScrollDirection.forward) {
-
 
         //+1 begin page end
         if (QuizzesProperties.quizzes.length-1 < page+1) {
@@ -133,21 +96,10 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
     });
   }
 
-
   @override
   void dispose(){
     scrollController.dispose();
     super.dispose();
-  }
-
-  _navigateToFilterObject(BuildContext context) async {
-    final result = await Navigator.push(context,
-      MaterialPageRoute(builder: (context) => LandingPage(quiz)),);
-    //refresh the state of your Widget
-    setState(() {
-      quiz = result;
-    });
-
   }
 
   @override
@@ -170,24 +122,9 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
             leading: new IconButton(
               //icon: new Icon(CustomIcons.menu), // Icono menu
               icon: new Image.asset("assets/ic_launcher.png", fit: BoxFit.cover, height: 50.0,), // Icono menu
-              onPressed: () {
-                /*setState(() {
-                  quiz.score=quiz.score+10;
-                });*/
-                //DataSaver.printData();
-                },
+              onPressed: () {},
             ),
-            actions: <Widget>[
-              /*new IconButton(
-                //icon: new Icon(CustomIcons.search, size: 26.0,), // per definir iconos propis
-                icon: new Icon(Icons.settings, size: 26.0,),
-                onPressed: () {
-                  /*for (Quiz q in QuizzesProperties.quizzes){
-                    print(q.name + " --> " + q.maximumScore.toString());
-                  }*/
-                },
-              )*/
-            ],
+            actions: <Widget>[],
           ),
 
           // Cos
@@ -211,7 +148,6 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                               child: new Text(
                                 "2018 Geography Quiz",
                                 style: new TextStyle(
-                                    //color: Colors.white,
                                     color: QuizzesProperties.colors[4],
                                     fontSize: 30.0
                                 ),
@@ -220,15 +156,12 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                             new Text(
                               "Try to aswer correctly.",
                               style: new TextStyle(
-                                  //color: Colors.white70
                                   color: QuizzesProperties.colors[4]
                               ),
                             ),
                             new Text(
                               quiz.getDescription(),
-                              //quiz.getDescription(),
                               style: new TextStyle(
-                                  //color: Colors.white70
                                   color: QuizzesProperties.colors[4]
                               ),
                             ),
@@ -246,10 +179,9 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                             EdgeInsets padding = const EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0, bottom: 30.0);
                             return new Padding(
                                 padding: padding,
-                                // LA CAIXA (CARTA)
+                                // BOX
                                 child: new InkWell(
                                   onTap: () =>
-                                      //_navigateToFilterObject(context),
                                     Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new LandingPage(quiz))),
                                     child: new Container(
                                       decoration: new BoxDecoration(
@@ -267,7 +199,6 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                                         children: <Widget>[
                                           new Container(
                                             decoration: new BoxDecoration(
-                                              //color: Colors.white,
                                               color: new Color(0xDDFFFFFF),
                                               borderRadius: new BorderRadius.circular(10.0),
                                             ),
@@ -321,9 +252,7 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                                                         children: <Widget>[
                                                           new Expanded(
                                                             child: new LinearProgressIndicator(
-                                                              //value: quiz.score/150,
                                                               value: quiz.maximumScore == null ? (0.0): quiz.maximumScore,
-                                                              //value: quiz.maximumScore,
                                                               backgroundColor: Colors.grey.withAlpha(50),
                                                               valueColor: new AlwaysStoppedAnimation<Color>(quiz.color),
                                                             ),
@@ -333,14 +262,11 @@ class _QuizSelectorState extends State<QuizSelector> with TickerProviderStateMix
                                                             child: new Text(
                                                                 quiz.maximumScore == null ? "0%": quiz.maximumScore.isNaN ? "0%": (quiz.maximumScore*100).round().toString() + "%",
                                                                 style: TextStyle(color: QuizzesProperties.colors[5])
-                                                                //(quiz.maximumScore*100).round().toString() + "%"
-
                                                             ),
                                                           )
                                                         ],
                                                       ),
                                                     )
-                                                  // )
                                                 ),
                                               ],
                                             ),
@@ -385,11 +311,9 @@ class CustomScrollPhysics extends ScrollPhysics {
 
   double _getPage(ScrollPosition position) {
     return position.pixels / (position.maxScrollExtent/numOfItems);
-    // return position.pixels / position.viewportDimension;
   }
 
   double _getPixels(ScrollPosition position, double page) {
-    // return page * position.viewportDimension;
     return page * (position.maxScrollExtent/numOfItems);
   }
 

@@ -73,11 +73,11 @@ class QuizPageState extends State<QuizPage> {
       children: <Widget>[
         new Column(// This is our main page
           children: <Widget>[
-            new AnswerButton(currentQuestion.getPosibleAnswer(0), QuizzesProperties.colors[0], () => handleAnswer(currentQuestion.getPosibleAnswer(0))), // true button
-            new AnswerButton(currentQuestion.getPosibleAnswer(1), QuizzesProperties.colors[1], () => handleAnswer(currentQuestion.getPosibleAnswer(1))), // true button
+            new AnswerButton(currentQuestion.getPossibleAnswer(0), QuizzesProperties.colors[0], () => handleAnswer(currentQuestion.getPossibleAnswer(0))), // true button
+            new AnswerButton(currentQuestion.getPossibleAnswer(1), QuizzesProperties.colors[1], () => handleAnswer(currentQuestion.getPossibleAnswer(1))), // true button
             new QuestionText(questionText, questionNumber),
-            new AnswerButton(currentQuestion.getPosibleAnswer(2), QuizzesProperties.colors[2], () => handleAnswer(currentQuestion.getPosibleAnswer(2))), // true button
-            new AnswerButton(currentQuestion.getPosibleAnswer(3), QuizzesProperties.colors[3], () => handleAnswer(currentQuestion.getPosibleAnswer(3))), // true button
+            new AnswerButton(currentQuestion.getPossibleAnswer(2), QuizzesProperties.colors[2], () => handleAnswer(currentQuestion.getPossibleAnswer(2))), // true button
+            new AnswerButton(currentQuestion.getPossibleAnswer(3), QuizzesProperties.colors[3], () => handleAnswer(currentQuestion.getPossibleAnswer(3))), // true button
           ]
         ),
       overlayShouldBeVisible == true ? new CorrectWrongOverlay(
@@ -86,9 +86,7 @@ class QuizPageState extends State<QuizPage> {
           () {
             if (widget.quiz.length == questionNumber || widget.quiz.numErrors > 3){
               overlayShouldBeVisible = false;
-              //DataSaver.saveData(widget.quiz.name, widget.quiz.score/widget.quiz.questionNumber);
               Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (BuildContext context) => new ScorePage(widget.quiz)),  ModalRoute.withName(Navigator.defaultRouteName));
-              //return;
             }
             currentQuestion = widget.quiz.nextQuestion;
             this.setState( () {
