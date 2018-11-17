@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../utils/quiz.dart';
-import './quiz_selector_page.dart';
 
 
 class ScorePage extends StatelessWidget{
